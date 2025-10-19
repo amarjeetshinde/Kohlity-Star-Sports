@@ -134,105 +134,7 @@
             box-shadow: 0 15px 40px rgba(0, 136, 204, 0.5);
         }
 
-        /* Alert Popup Overlay */
-        .alert-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.3s ease;
-        }
-
-        .alert-overlay.active {
-            display: flex;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Alert Box */
-        .alert-box {
-            background: #2c3e50;
-            border-radius: 12px;
-            padding: 0;
-            max-width: 340px;
-            width: 90%;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            animation: slideUp 0.3s ease;
-            overflow: hidden;
-        }
-
-        @keyframes slideUp {
-            from {
-                transform: translateY(50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
-        }
-
-        .alert-content {
-            padding: 24px;
-            text-align: center;
-        }
-
-        .alert-title {
-            font-size: 1.1em;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-
-        .alert-message {
-            font-size: 0.95em;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5;
-            margin-bottom: 0;
-        }
-
-        .alert-buttons {
-            display: flex;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .alert-btn {
-            flex: 1;
-            padding: 16px;
-            border: none;
-            background: transparent;
-            color: #3498db;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.2s ease;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .alert-btn:first-child {
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .alert-btn:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .alert-btn.primary {
-            color: #3498db;
-            font-weight: 700;
-        }
-
-        /* Existing Modal (keep for the big modal too) */
+        /* Popup Modal */
         .modal {
             display: block;
             position: fixed;
@@ -248,6 +150,11 @@
 
         .modal.hidden {
             display: none !important;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal-content {
@@ -350,30 +257,12 @@
                 height: 300px;
                 min-height: 250px;
             }
-
-            .alert-box {
-                max-width: 320px;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- Alert Popup (Android-style) -->
-    <div id="alertPopup" class="alert-overlay">
-        <div class="alert-box">
-            <div class="alert-content">
-                <div class="alert-title">KOHLITY says</div>
-                <div class="alert-message">Join Our Telegram Channel for more updates</div>
-            </div>
-            <div class="alert-buttons">
-                <button class="alert-btn" onclick="closeAlert()">Cancel</button>
-                <button class="alert-btn primary" onclick="acceptAlert()">OK</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Big Popup Modal (Support Us) -->
-    <div id="supportModal" class="modal hidden">
+    <!-- Popup Modal -->
+    <div id="supportModal" class="modal">
         <div class="modal-content">
             <h2>🏏 Support Us!</h2>
             <p>Join our Telegram channel to get updates on live matches and support free cricket streaming!</p>
@@ -402,11 +291,13 @@
                 LIVE
             </div>
             <iframe id="contentFrame"
-                    src="https://cricketstan.github.io/Channel-13"
+                    sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation"
                     frameborder="0"
-                    allowfullscreen
-                    allow="autoplay; encrypted-media"
-                    sandbox="allow-forms allow-pointer-lock allow-same-origin allow-scripts allow-top-navigation">
+                    gesture="media"
+                    allow="encrypted-media"
+                    allowfullscreen="true"
+                    scrolling="no"
+                    src="https://cricketstan.github.io/Channel-13">
             </iframe>
         </div>
 
@@ -419,36 +310,18 @@
     </div>
     
     <script>
-        const alertPopup = document.getElementById('alertPopup');
         const modal = document.getElementById('supportModal');
 
-        // Alert popup functions
-        function showAlert() {
-            alertPopup.classList.add('active');
-        }
-
-        function closeAlert() {
-            alertPopup.classList.remove('active');
-            // Show Support Us popup instantly after alert is closed
-            modal.style.display = 'block';
-            modal.classList.remove('hidden');
-        }
-
-        function acceptAlert() {
-            // Redirect to Telegram when OK is clicked
-            window.open('https://t.me/+H4SNbEBhYfA1Mzg1', '_blank');
-            closeAlert();
-        }
-
-        // Close Support Us modal function
+        // Close modal function
         function closeModal() {
             modal.style.display = 'none';
             modal.classList.add('hidden');
         }
 
-        // Show alert popup immediately on page load
+        // Show popup every time on page load/reload
         window.onload = function() {
-            showAlert();
+            modal.style.display = 'block';
+            modal.classList.remove('hidden');
         };
 
         // Prevent closing modal by clicking outside
